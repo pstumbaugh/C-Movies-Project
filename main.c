@@ -112,24 +112,24 @@ struct movie *createMovie(char *currLine)
     char *token;
 
     // Get movie title
-    token = strtok_r(currLine, " ", &saveptr);
+    token = strtok_r(currLine, ",", &saveptr);
     currMovie->title = calloc(strlen(token) + 1, sizeof(char));
     strcpy(currMovie->title, token);
     
     //get movie year
-    token = strtok_r(currLine, " ", &saveptr);
+    token = strtok_r(currLine, ",", &saveptr);
     currMovie->tempYear = calloc(strlen(token) + 1, sizeof(char));
     strcpy(currMovie->tempYear, token);
     //convert from string to int
     currMovie->year = atoi(currMovie->tempYear);
 
     //get movie language(s)
-    token = strtok_r(currLine, " ", &saveptr);
+    token = strtok_r(currLine, ",", &saveptr);
     currMovie->language = calloc(strlen(token) + 1, sizeof(char));
     strcpy(currMovie->language, token);
 
     //get movie rating
-    token = strtok_r(currLine, " ", &saveptr);
+    token = strtok_r(currLine, ",", &saveptr);
     currMovie->tempRating = calloc(strlen(token) + 1, sizeof(char));
     strcpy(currMovie->tempRating, token);
     //convert from string to double
@@ -161,7 +161,11 @@ struct movie *processFile(char *filePath)
     //tail will point to last item in linked list
     struct movie *head, *tail = NULL;
 
-    // Read the file line by line
+    //get first line and do nothing with it
+    //first line is just column titles
+    nread = getline(&currLine, &len, moviesFile);
+
+    // Read the file line by line (starting at line 2)
     //loop until out of data
     while ((nread = getline(&currLine, &len, moviesFile)) != -1)
     {

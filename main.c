@@ -129,7 +129,8 @@ struct movie *createMovie(char *currLine)
     strcpy(currMovie->language, token);
 
     //get movie rating
-    token = strtok_r(currLine, ",", &saveptr);
+    //delimted by new line \n
+    token = strtok_r(currLine, "\n", &saveptr);
     currMovie->tempRating = calloc(strlen(token) + 1, sizeof(char));
     strcpy(currMovie->tempRating, token);
     //convert from string to double

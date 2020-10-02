@@ -23,14 +23,17 @@ int main(int argc, char *argv[])
     int userChoice = 0;
     int userYear = 0;
     char *userLanguage;
-    
+
+char *myFile = "data.txt";
+/*
     if (argc < 2)
     {
         printf("You must provide the name of the file to process\n");
         printf("Example usage: ./movies movie_sample_1.txt\n");
         return EXIT_FAILURE;
     }
-    struct movie *list = processFile(argv[1]);
+*/
+    struct movie *list = processFile(myFile);
     
     while (userChoice)
         {
@@ -117,20 +120,20 @@ struct movie *createMovie(char *currLine)
     strcpy(currMovie->title, token);
     
     //get movie year
-    token = strtok_r(currLine, ",", &saveptr);
+    token = strtok_r(NULL, ",", &saveptr);
     currMovie->tempYear = calloc(strlen(token) + 1, sizeof(char));
     strcpy(currMovie->tempYear, token);
     //convert from string to int
     currMovie->year = atoi(currMovie->tempYear);
 
     //get movie language(s)
-    token = strtok_r(currLine, ",", &saveptr);
+    token = strtok_r(NULL, ",", &saveptr);
     currMovie->language = calloc(strlen(token) + 1, sizeof(char));
     strcpy(currMovie->language, token);
 
     //get movie rating
     //delimted by new line \n
-    token = strtok_r(currLine, "\n", &saveptr);
+    token = strtok_r(NULL, "\n", &saveptr);
     currMovie->tempRating = calloc(strlen(token) + 1, sizeof(char));
     strcpy(currMovie->tempRating, token);
     //convert from string to double
@@ -164,7 +167,7 @@ struct movie *processFile(char *filePath)
 
     //get first line and do nothing with it
     //first line is just column titles
-    nread = getline(&currLine, &len, moviesFile);
+    getline(&currLine, &len, moviesFile);
 
     // Read the file line by line (starting at line 2)
     //loop until out of data

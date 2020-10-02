@@ -14,6 +14,7 @@ struct movie *processFile(char *filePath);
 void printMovies(struct movie* movies);
 void printAllMoviesInfo(struct movie *list);
 int movieCount(struct movie *list);
+void printMoviesByYear(struct movie *list, int userYear);
 
 
 //MAIN: get command line argument of .csv file, parse information about 
@@ -25,7 +26,7 @@ int main(int argc, char *argv[])
     int userYear = 0;
     char *userLanguage;
 
-char *myFile = "data.txt";
+char *myFile = "data.txt";                                                      //**need to delete and use arg
 /*
     if (argc < 2)
     {
@@ -34,11 +35,11 @@ char *myFile = "data.txt";
         return EXIT_FAILURE;
     }
 */
-    struct movie *list = processFile(myFile);
+    struct movie *list = processFile(myFile);                                   //******need to change to arg
     int numOfMovies = movieCount(list);
     printf("Processed file %s and parsed data for %i movies\n\n", 
         myFile, numOfMovies);
-
+                                                                                //******need to change to arg
     
     while (userChoice)
         {
@@ -56,20 +57,22 @@ char *myFile = "data.txt";
     //menu options:
     //if bad input
         if (userChoice < 1 || userChoice > 4) 
-            printf("You entered an incorrect choice. Try again.");
+            printf("You entered an incorrect choice. Try again.\n\n");
             
     //Movies in a specific year
         else if (userChoice == 1)
         {
             printf("Enter the year for which you want to see movies: ");
             scanf("%i", &userYear);
+            printMoviesByYear(list, userYear);
+            printf("\n\n");
         }
         
     //Highest rated movie each year
         else if (userChoice == 2)
         {
-            printf("Enter the year for which you want to see movies: ");
-            scanf("%i", &userYear);
+            //printf(" ");
+            //scanf("%i", &);
         }
         
     //Title and year of movies in a specific language
@@ -264,19 +267,46 @@ void printAllMoviesInfo(struct movie *list)
 
 //will count the number of movies saved in our object
 //INPUT: movie list object
-//OUTPUT: int count of how many movies are saved in list
+//OUTPUT: count of how many movies are saved
 int movieCount(struct movie *list)
 {
     struct movie *temp = list;
     int counter = 0;
+    
+    //iterate through list and count movies
     while (temp != NULL)
     {
         counter++;
         temp = temp->next;
     }
-    return counter;
     
+    return counter;
 }
 
 
+//Prints out each movie in a specified year
+//INPUT: movie list object
+//OUTPUT: print of movies
+void printMoviesByYear(struct movie *list, int userYear)
+{
+    struct movie *temp = list;
+    int counter = 0;
+    
+    //iterate through list
+    while (temp != NULL)
+    {
+        if (temp->year == userYear) //if user year matches movie year, print it
+        {
+            printf("%s\n", temp->title);
+            counter++;
+        }
+        temp = temp->next;
+    }
+    
+    if (counter == 0) //no movies were found, print message
+    {
+        printf("No data about movies released in the year %i", userYear);
+    }
+    return;
+}
 

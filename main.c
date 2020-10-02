@@ -264,7 +264,7 @@ void printAllMoviesInfo(struct movie *list)
 
 //will count the number of movies saved in our object
 //INPUT: movie list object
-//OUTPUT: count of how many movies are saved
+//OUTPUT: int count of how many movies are saved in list
 int movieCount(struct movie *list)
 {
     struct movie *temp = list;

@@ -13,6 +13,7 @@ struct movie *createMovie(char *currLine);
 struct movie *processFile(char *filePath);
 void printMovies(struct movie* movies);
 void printAllMoviesInfo(struct movie *list);
+int movieCount(struct movie *list);
 
 
 //MAIN: get command line argument of .csv file, parse information about 
@@ -34,6 +35,10 @@ char *myFile = "data.txt";
     }
 */
     struct movie *list = processFile(myFile);
+    int numOfMovies = movieCount(list);
+    printf("Processed file %s and parsed data for %i movies\n\n", 
+        myFile, numOfMovies);
+
     
     while (userChoice)
         {
@@ -63,7 +68,8 @@ char *myFile = "data.txt";
     //Highest rated movie each year
         else if (userChoice == 2)
         {
-            
+            printf("Enter the year for which you want to see movies: ");
+            scanf("%i", &userYear);
         }
         
     //Title and year of movies in a specific language
@@ -96,8 +102,8 @@ struct movie
     char *tempYear; //using as a temp holder, will change str to int year
     int year;
     //at most, 5 languages can be saved (0-4) 
-    //each string max of 20 characters
-    char languages[4][20]; 
+    //each string max of 20 characters (+null terminating)
+    char languages[4][21]; 
     char *tempRating; //using as a temp holder, will change str to int rating
     double rating;
     struct movie *next; //pointer to next linked list item
@@ -255,6 +261,22 @@ void printAllMoviesInfo(struct movie *list)
     }
 }
 
+
+//will count the number of movies saved in our object
+//INPUT: movie list object
+//OUTPUT: int count of how many movies are saved in list
+int movieCount(struct movie *list)
+{
+    struct movie *temp = list;
+    int counter = 0;
+    while (temp != NULL)
+    {
+        counter++;
+        temp = temp->next;
+    }
+    return counter;
+    
+}
 
 
 

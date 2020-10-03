@@ -11,13 +11,13 @@
 //FUNCTION DECLARATIONS
 struct movie *createMovie(char *currLine);
 struct movie *processFile(char *filePath);
-void printMovies(struct movie* movies);
-void printAllMoviesInfo(struct movie *list);
 int movieCount(struct movie *list);
 void printMoviesByYear(struct movie *list, int userYear);
 int findLowestYear(struct movie *list);
 int findHighestYear(struct movie *list);
 void printHighestRatedMoviesByYear (struct movie *list);
+void printMoviesByLanguage(struct movie *list, char *userLanguage);
+
 
 
 //MAIN: get command line argument of .csv file, parse information about 
@@ -27,7 +27,8 @@ int main(int argc, char *argv[])
 {
     int userChoice = 1; //initialize to 1 to enter while loop (later)
     int userYear = 0;
-    char *userLanguage;
+    char userLanguage[21];
+
 
 char *myFile = "data.txt";                                                      //**need to delete and use arg
 /*
@@ -83,6 +84,8 @@ char *myFile = "data.txt";                                                      
         {
             printf("Enter the language for which you want to see movies: ");
             scanf("%s", userLanguage);
+            printMoviesByLanguage(list, userLanguage);
+            printf("\n\n");
         }
         
     //Exit program
@@ -123,14 +126,6 @@ struct movie *createMovie(char *currLine)
 {
     struct movie *currMovie = malloc(sizeof(struct movie));
 
-    //initialize languages 2d array
-    for (int counter = 0; counter <= 4; counter++)
-    {
-        //putting a "," in all languages
-        //will use that as delimiter when parsing through data for printing 
-        strcpy(currMovie->languages[counter], ",");
-    }
-
     // For use with strtok_r
     char *saveptr;
     //token placeholder for info
@@ -169,13 +164,15 @@ struct movie *createMovie(char *currLine)
         if (langToken[strlen(langToken)-1] == ']')
         {
             langToken[strlen(langToken)-1] = '\0'; //replace last char with null
-            strcpy(currMovie->languages[langCounter], langToken);
+            int size = sizeof(langToken);
+            strncpy(currMovie->languages[langCounter], langToken, size+1);
             break;
         }
         //else copy item into languages at desired array position
         else
         {   
-            strcpy(currMovie->languages[langCounter], langToken);
+            int size = sizeof(langToken);
+            strncpy(currMovie->languages[langCounter], langToken, size+1);
             //get next word, if available
             langToken = strtok_r(NULL, ";", &langSaveptr);
             langCounter++;
@@ -249,23 +246,6 @@ struct movie *processFile(char *filePath)
     return head;
 }
 
-
-void printMovies(struct movie* movies)
-{
-    //print out info in moi
-  printf("test");
-}
-
-
-void printAllMoviesInfo(struct movie *list)
-{
-    
-    while (list != NULL)
-    {
-        printMovies(list);
-        list = list->next;
-    }
-}
 
 
 //will count the number of movies saved in our object
@@ -398,12 +378,56 @@ void printHighestRatedMoviesByYear (struct movie *list)
             if (highestRated != NULL)//if there wasn't a movie that year, skip
             {
                 //print out year, high movie rating and movie title
-                printf("%i %f %s \n", yearCounter, highestRated->rating, highestRated->title);
+                printf("%i %.1f %s \n", yearCounter, highestRated->rating, highestRated->title);
             }
             
             yearCounter++;
         }
     }
+    
+    return;
 }
+
+
+
+//prints out any movies in a language 
+//INPUT: stuct movie list, cstring userLanguage
+//OUTPUT: prints out movies if language matches
+void printMoviesByLanguage(struct movie *list, char *userLanguage)
+{
+    struct movie *temp = list;
+    int anyMoviesFound = 0; //false if no movies are found in that language
+    
+    //iterate through list of movies, checking for language match 
+    while (temp != NULL)
+    {
+        int counter = 0;
+        //check each movie's language array for match 
+        while (counter < 5) //max of 5 languages (0-4)
+        {
+            //compares temp language to user language. If equals 0, they match
+            if (strcmp(temp->languages[counter], userLanguage) == 0)
+            {
+                anyMoviesFound = 1;
+                printf("%i %s\n", temp->year, temp->title);
+                break;
+            }
+            counter++;
+        }
+        temp = temp->next;
+    }
+    
+    //if no movies were found in the userLanguage, print error
+    if (anyMoviesFound == 0)
+    {
+        printf("No data about movies released in %s", userLanguage);
+    }
+    
+    return;
+}
+
+
+
+
 
 

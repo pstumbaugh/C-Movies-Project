@@ -15,6 +15,9 @@ void printMovies(struct movie* movies);
 void printAllMoviesInfo(struct movie *list);
 int movieCount(struct movie *list);
 void printMoviesByYear(struct movie *list, int userYear);
+int findLowestYear(struct movie *list);
+int findHighestYear(struct movie *list);
+void printHighestRatedMoviesByYear (struct movie *list);
 
 
 //MAIN: get command line argument of .csv file, parse information about 
@@ -71,8 +74,8 @@ char *myFile = "data.txt";                                                      
     //Highest rated movie each year
         else if (userChoice == 2)
         {
-            //printf(" ");
-            //scanf("%i", &);
+            printHighestRatedMoviesByYear (list);
+            printf("\n\n");
         }
         
     //Title and year of movies in a specific language
@@ -309,4 +312,98 @@ void printMoviesByYear(struct movie *list, int userYear)
     }
     return;
 }
+
+
+//finds and returns lowest year in list 
+//INPUT: struct movie list 
+//OUTPUT: int of lowest year (returns 9999 if no movies)
+int findLowestYear(struct movie *list)
+{
+    struct movie *temp = list;
+    int lowYear = 9999; //starting with max high year
+    
+    //iterate through list and replace lowYear if movie year is lower
+    while (temp != NULL)
+    {
+        if (temp->year < lowYear)
+            lowYear = temp->year;
+        temp = temp->next;
+    }
+    
+    return lowYear;
+}
+
+
+//finds and returns highest year in list 
+//INPUT: struct movie list 
+//OUTPUT: int of highest year
+int findHighestYear(struct movie *list)
+{
+    struct movie *temp = list;
+    int highYear = 0; //starting with max high year
+    
+    //iterate through list and replace highYear if movie year is lower
+    while (temp != NULL)
+    {
+        if (temp->year > highYear)
+            highYear = temp->year;
+        temp = temp->next;
+    }
+    
+    return highYear;
+}
+
+//prints out movies by year, highest rated
+//INPUT: struct movie list, low year and high year 
+//OUTPUT: prints out highest rated movies 
+//note: if two or more movies are the highest rated, program will pick
+// the first movie it encounters in list and print that only
+void printHighestRatedMoviesByYear (struct movie *list)
+{
+    //get bounds
+    int lowYear = findLowestYear(list);
+    int highYear = findHighestYear(list);
+    int yearCounter = lowYear; //counts up in loop until reaching high year
+
+    if (lowYear == 9999 || highYear == 0)//if nothing in list 
+    {
+        printf("Movie list is empty, no movies to display");
+    }
+    else //go through the list, printing out highest rated movie
+    {
+        //iterate through years, lowest to highest
+        while (yearCounter <= highYear)
+        {
+            //reset loop variables
+            struct movie *temp = list;
+            struct movie *highestRated = NULL; //placeholder for highest rated movie
+            double highRating = 0.0;
+            
+            //iterate through list for current year
+            while (temp != NULL)
+            {
+                //if currMovie is the same year selected, check if it's the 
+                //highest rated so far
+                if (temp->year == yearCounter)
+                {
+                    if (temp->rating > highRating)//movie is better rated 
+                    {
+                        highestRated = temp;
+                        highRating = temp->rating;
+                    }
+                }
+                temp = temp->next;
+            }
+            
+            if (highestRated != NULL)//if there wasn't a movie that year, skip
+            {
+                //print out year, high movie rating and movie title
+                printf("%i %f %s \n", yearCounter, highestRated->rating, highestRated->title);
+            }
+            
+            yearCounter++;
+        }
+    }
+}
+
 

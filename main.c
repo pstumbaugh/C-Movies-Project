@@ -25,6 +25,7 @@ void printMoviesByLanguage(struct movie *list, char *userLanguage);
 // Give user menu optinos of what they can do with their information
 int main(int argc, char *argv[])
 {
+    //variables
     int userChoice = 1; //initialize to 1 to enter while loop (later)
     int userYear = 0;
     char userLanguage[21];
@@ -39,15 +40,17 @@ char *myFile = "data.txt";                                                      
         return EXIT_FAILURE;
     }
 */
+    //Process movie file and print initial findings
     struct movie *list = processFile(myFile);                                   //******need to change to arg
     int numOfMovies = movieCount(list);
     printf("Processed file %s and parsed data for %i movies\n\n", 
         myFile, numOfMovies);
                                                                                 //******need to change to arg
     
+    //main user interface loop
     while (userChoice)
-        {
-    //Show user main menu
+    {
+    //Show user main menu options
         printf("1. Show movies released in the specified year.\n");
         printf("2. Show highest rated movie for each year.\n");
         printf("3. Show the title and year of release of all movies in a "
@@ -59,40 +62,44 @@ char *myFile = "data.txt";                                                      
         scanf("%i", &userChoice);
         
     //menu options:
-    //if bad input
+    //if bad input (bounds 1-4 good, everything else display try again message)
         if (userChoice < 1 || userChoice > 4) 
             printf("You entered an incorrect choice. Try again.\n\n");
-            
+
+    //OPTION 1    
     //Movies in a specific year
         else if (userChoice == 1)
         {
             printf("Enter the year for which you want to see movies: ");
-            scanf("%i", &userYear);
-            printMoviesByYear(list, userYear);
+            scanf("%i", &userYear); //get user year input
+            printMoviesByYear(list, userYear); //print all movies in that year
             printf("\n\n");
         }
-        
+    
+    //OPTION 2
     //Highest rated movie each year
         else if (userChoice == 2)
         {
-            printHighestRatedMoviesByYear (list);
+            printHighestRatedMoviesByYear(list); //print all highest rated movies per year
             printf("\n\n");
         }
         
+    //OPTION 3
     //Title and year of movies in a specific language
         else if (userChoice == 3)
         {
             printf("Enter the language for which you want to see movies: ");
-            scanf("%s", userLanguage);
-            printMoviesByLanguage(list, userLanguage);
+            scanf("%s", userLanguage); //prompt user for language
+            printMoviesByLanguage(list, userLanguage); //print movies matching language
             printf("\n\n");
         }
         
+    //OPTION 4
     //Exit program
         else if (userChoice == 4)
         {
             printf("Thank you. Have a nice day!\n\n");
-            break;
+            break; //break from while loop, goes to return for main() function
         }
     }
     
@@ -101,7 +108,7 @@ char *myFile = "data.txt";                                                      
 
 
 
-//FUNCTIONS / MOVIE STRUCT --------------------------------------
+//MOVIE STRUCT --------------------------------------
 
 //movie struct
 struct movie
@@ -119,69 +126,76 @@ struct movie
 };
 
 
+
+//FUNCTIONS ------------------------------------------------------------
+
+
 //creator for movie struct. Will parse through current line to gather info
-//INPUT: currLine pointer
+//INPUT: currLine cstring pointer
 //OUTPUT: movie struct node
 struct movie *createMovie(char *currLine)
 {
+    //Variables
+    //allocate memory for new movie struct (will free at end of function)
     struct movie *currMovie = malloc(sizeof(struct movie));
-
     // For use with strtok_r
     char *saveptr;
-    //token placeholder for info
+    char *langSaveptr;
+    //token placeholders for info
     char *token;
     char *langToken;
-    char *langSaveptr;
 
     // Get movie title
-    token = strtok_r(currLine, ",", &saveptr);
+    token = strtok_r(currLine, ",", &saveptr); //from first token
     currMovie->title = calloc(strlen(token) + 1, sizeof(char));
     strcpy(currMovie->title, token);
     
     //get movie year
-    token = strtok_r(NULL, ",", &saveptr);
+    token = strtok_r(NULL, ",", &saveptr); //from second token
     currMovie->tempYear = calloc(strlen(token) + 1, sizeof(char));
     strcpy(currMovie->tempYear, token);
     //convert from string to int
     currMovie->year = atoi(currMovie->tempYear);
 
-    token = strtok_r(NULL, ",", &saveptr);
     //get movie language(s)
-    langToken = strtok_r(token, ";", &langSaveptr);
+    //token includes all languages
+    token = strtok_r(NULL, ",", &saveptr); //from third token
+    langToken = strtok_r(token, ";", &langSaveptr); //get first language in token
     int langCounter = 0;
     while (langCounter < 5)
     {
-        if (langToken == "\0")//nothing in token to save, break
+        //nothing in token to save, break
+        if (langToken == "\0")
         {
             break;
         }
-        //first item in list, remove leading "["
+        //first item in token list, remove leading "["
         else if (langCounter == 0)
         {
             memcpy(langToken, langToken+1,sizeof(langToken));
         }
+
         //if last langauge, remove trailing "]" and break
         if (langToken[strlen(langToken)-1] == ']')
         {
             langToken[strlen(langToken)-1] = '\0'; //replace last char with null
             int size = sizeof(langToken);
-            strncpy(currMovie->languages[langCounter], langToken, size+1);
+            strncpy(currMovie->languages[langCounter], langToken, size+1); //save language into array position
             break;
         }
-        //else copy item into languages at desired array position
+        //else copy item into languages array at desired array position
         else
         {   
             int size = sizeof(langToken);
             strncpy(currMovie->languages[langCounter], langToken, size+1);
-            //get next word, if available
+            //get next word, (or '\0' if nothing left)
             langToken = strtok_r(NULL, ";", &langSaveptr);
             langCounter++;
         }
-
     }
 
     //get movie rating
-    //delimted by new line \n
+    //delimted by new line \n 
     token = strtok_r(NULL, "\n", &saveptr);
     currMovie->tempRating = calloc(strlen(token) + 1, sizeof(char));
     strcpy(currMovie->tempRating, token);

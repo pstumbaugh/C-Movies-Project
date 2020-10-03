@@ -172,7 +172,18 @@ struct movie *createMovie(char *currLine)
         //first item in token list, remove leading "["
         else if (langCounter == 0)
         {
-            memcpy(langToken, langToken+1,sizeof(langToken));
+            if (langToken[strlen(langToken)-1] == ']') //only one language
+            {
+                memcpy(langToken, langToken+1,sizeof(langToken));//remove leading "["
+                //above adds last char on to word again ("]")
+                //below is strlen(...)-2 to take off both trailing "]" characters
+                langToken[strlen(langToken)-2] = '\0'; //replace last char with null
+                int size = sizeof(langToken);
+                strncpy(currMovie->languages[langCounter], langToken, size+1); //save language into array position
+                break;
+            }
+            else
+                memcpy(langToken, langToken+1,sizeof(langToken));
         }
 
         //if last langauge, remove trailing "]" and break

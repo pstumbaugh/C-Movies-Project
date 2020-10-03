@@ -278,7 +278,8 @@ void printMoviesByYear(struct movie *list, int userYear)
     //iterate through list
     while (temp != NULL)
     {
-        if (temp->year == userYear) //if user year matches movie year, print it
+        //if temp movie year matches user year, print info
+        if (temp->year == userYear)
         {
             printf("%s\n", temp->title);
             counter++;
@@ -300,7 +301,7 @@ void printMoviesByYear(struct movie *list, int userYear)
 int findLowestYear(struct movie *list)
 {
     struct movie *temp = list;
-    int lowYear = 9999; //starting with max high year
+    int lowYear = 9999; //starting with max high year (use 9999 for error check)
     
     //iterate through list and replace lowYear if movie year is lower
     while (temp != NULL)
@@ -320,9 +321,9 @@ int findLowestYear(struct movie *list)
 int findHighestYear(struct movie *list)
 {
     struct movie *temp = list;
-    int highYear = 0; //starting with max high year
+    int highYear = 0; //starting with max low year (0 or NULL)
     
-    //iterate through list and replace highYear if movie year is lower
+    //iterate through list and replace highYear if movie year is higher
     while (temp != NULL)
     {
         if (temp->year > highYear)
@@ -333,6 +334,8 @@ int findHighestYear(struct movie *list)
     return highYear;
 }
 
+
+
 //prints out movies by year, highest rated
 //INPUT: struct movie list, low year and high year 
 //OUTPUT: prints out highest rated movies 
@@ -340,10 +343,10 @@ int findHighestYear(struct movie *list)
 // the first movie it encounters in list and print that only
 void printHighestRatedMoviesByYear (struct movie *list)
 {
-    //get bounds
-    int lowYear = findLowestYear(list);
-    int highYear = findHighestYear(list);
-    int yearCounter = lowYear; //counts up in loop until reaching high year
+    //get bounds (years)
+    int lowYear = findLowestYear(list); //returns 9999 if nothing in list
+    int highYear = findHighestYear(list); //returns 0 if nothing in list
+    int yearCounter = lowYear; //used for loop counter
 
     if (lowYear == 9999 || highYear == 0)//if nothing in list 
     {
@@ -359,14 +362,14 @@ void printHighestRatedMoviesByYear (struct movie *list)
             struct movie *highestRated = NULL; //placeholder for highest rated movie
             double highRating = 0.0;
             
-            //iterate through list for current year
+            //iterate through list for current year (yearCounter)
             while (temp != NULL)
             {
-                //if currMovie is the same year selected, check if it's the 
-                //highest rated so far
+                //see if movie year matches yearCounter
                 if (temp->year == yearCounter)
                 {
-                    if (temp->rating > highRating)//movie is better rated 
+                    //check if rating for current movie is higher
+                    if (temp->rating > highRating)
                     {
                         highestRated = temp;
                         highRating = temp->rating;
@@ -375,7 +378,8 @@ void printHighestRatedMoviesByYear (struct movie *list)
                 temp = temp->next;
             }
             
-            if (highestRated != NULL)//if there wasn't a movie that year, skip
+            //if there wasn't a movie that year, skip 
+            if (highestRated != NULL) //NULL also equals 0
             {
                 //print out year, high movie rating and movie title
                 printf("%i %.1f %s \n", yearCounter, highestRated->rating, highestRated->title);
@@ -390,26 +394,27 @@ void printHighestRatedMoviesByYear (struct movie *list)
 
 
 
-//prints out any movies in a language 
+//prints out any movies in a language called for by user
 //INPUT: stuct movie list, cstring userLanguage
 //OUTPUT: prints out movies if language matches
 void printMoviesByLanguage(struct movie *list, char *userLanguage)
 {
     struct movie *temp = list;
-    int anyMoviesFound = 0; //false if no movies are found in that language
+    int anyMoviesFound = 0; //false (0) if no movies are found in that language
     
     //iterate through list of movies, checking for language match 
     while (temp != NULL)
     {
         int counter = 0;
+        
         //check each movie's language array for match 
-        while (counter < 5) //max of 5 languages (0-4)
+        while (counter < 5) //max of 5 languages (0-4) in array
         {
-            //compares temp language to user language. If equals 0, they match
+            //compares temp language to userLanguage. If strcmp equals 0, they match
             if (strcmp(temp->languages[counter], userLanguage) == 0)
             {
-                anyMoviesFound = 1;
-                printf("%i %s\n", temp->year, temp->title);
+                anyMoviesFound = 1; //at least one movie found, make true (1)
+                printf("%i %s\n", temp->year, temp->title); //print info
                 break;
             }
             counter++;

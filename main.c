@@ -1,6 +1,6 @@
-//create using: 
-// gcc --std=c99 -o movies main.c 
-//then run using: 
+//create using:
+// gcc --std=c99 -o movies main.c
+//then run using:
 // ./movies movie_sample_1.csv
 
 #include <stdio.h>
@@ -20,8 +20,8 @@ void printMoviesByLanguage(struct movie *list, char *userLanguage);
 
 
 
-//MAIN: get command line argument of .csv file, parse information about 
-// movies into a linked list using the movie struct. 
+//MAIN: get command line argument of .csv file, parse information about
+// movies into a linked list using the movie struct.
 // Give user menu optinos of what they can do with their information
 int main(int argc, char *argv[])
 {
@@ -43,7 +43,7 @@ char *myFile = "movie_sample_1";                                                
     //Process movie file and print initial findings
     struct movie *list = processFile(myFile);                                   //******need to change to arg
     int numOfMovies = movieCount(list);
-    printf("Processed file %s and parsed data for %i movies\n\n", 
+    printf("Processed file %s and parsed data for %i movies\n\n",
         myFile, numOfMovies);
                                                                                 //******need to change to arg
     
@@ -63,10 +63,10 @@ char *myFile = "movie_sample_1";                                                
         
     //menu options:
     //if bad input (bounds 1-4 good, everything else display try again message)
-        if (userChoice < 1 || userChoice > 4) 
+        if (userChoice < 1 || userChoice > 4)
             printf("You entered an incorrect choice. Try again.\n\n");
 
-    //OPTION 1    
+    //OPTION 1
     //Movies in a specific year
         else if (userChoice == 1)
         {
@@ -117,9 +117,9 @@ struct movie
     char *title;
     char *tempYear; //using as a temp holder, will change str to int year
     int year;
-    //at most, 5 languages can be saved (0-4) 
+    //at most, 5 languages can be saved (0-4)
     //each string max of 20 characters (+null terminating)
-    char languages[4][21]; 
+    char languages[4][21];
     char *tempRating; //using as a temp holder, will change str to int rating
     double rating;
     struct movie *next; //pointer to next linked list item
@@ -165,7 +165,7 @@ struct movie *createMovie(char *currLine)
     while (langCounter < 5)
     {
         //nothing in token to save, break
-        if (langToken == "\0")
+        if (langToken == NULL)
         {
             break;
         }
@@ -196,7 +196,7 @@ struct movie *createMovie(char *currLine)
         }
         //else copy item into languages array at desired array position
         else
-        {   
+        {
             int size = sizeof(langToken);
             strncpy(currMovie->languages[langCounter], langToken, size+1);
             //get next word, (or '\0' if nothing left)
@@ -206,13 +206,13 @@ struct movie *createMovie(char *currLine)
     }
 
     //get movie rating
-    //delimted by new line \n 
+    //delimted by new line \n
     token = strtok_r(NULL, "\n", &saveptr);
     currMovie->tempRating = calloc(strlen(token) + 1, sizeof(char));
     strcpy(currMovie->tempRating, token);
     //convert from string to double
-    char* end; 
-    currMovie->rating = strtod(currMovie->tempRating, &end); 
+    char* end;
+    currMovie->rating = strtod(currMovie->tempRating, &end);
     
     //assume this node will be at end of list, set next pointer to NULL
     currMovie->next = NULL;
@@ -221,7 +221,7 @@ struct movie *createMovie(char *currLine)
 }
 
 
-//read through input file and parse information into a linked list of movies 
+//read through input file and parse information into a linked list of movies
 //INPUT: cstring pointer filePath
 //OUTPUT: head pointer to linked list
 struct movie *processFile(char *filePath)
@@ -233,9 +233,8 @@ struct movie *processFile(char *filePath)
     char *currLine = NULL; //assume starting with no data, null
     size_t len = 0;
     ssize_t nread;
-    char *token;
     //setup head/tail pointers for linked list to NULL (empty list)
-    //head will point to head of linked list. 
+    //head will point to head of linked list.
     //tail will point to last item in linked list
     struct movie *head = NULL;
     struct movie *tail = NULL;
@@ -248,7 +247,7 @@ struct movie *processFile(char *filePath)
     //loop until out of data
     while ((nread = getline(&currLine, &len, moviesFile)) != -1)
     {
-        //if in loop, assume there is a new movie to get 
+        //if in loop, assume there is a new movie to get
         //create a new movie node, call createMovie function to get info
         // from line
         struct movie *newNode = createMovie(currLine);
@@ -261,7 +260,7 @@ struct movie *processFile(char *filePath)
         }
         else //there are movies already in data, add to end of linked list
         {
-            tail->next = newNode; 
+            tail->next = newNode;
             tail = newNode; //reset tail pointer to current node
         }
     }
@@ -320,8 +319,8 @@ void printMoviesByYear(struct movie *list, int userYear)
 }
 
 
-//finds and returns lowest year in list 
-//INPUT: struct movie list 
+//finds and returns lowest year in list
+//INPUT: struct movie list
 //OUTPUT: int of lowest year (returns 9999 if no movies)
 int findLowestYear(struct movie *list)
 {
@@ -340,8 +339,8 @@ int findLowestYear(struct movie *list)
 }
 
 
-//finds and returns highest year in list 
-//INPUT: struct movie list 
+//finds and returns highest year in list
+//INPUT: struct movie list
 //OUTPUT: int of highest year
 int findHighestYear(struct movie *list)
 {
@@ -362,8 +361,8 @@ int findHighestYear(struct movie *list)
 
 
 //prints out movies by year, highest rated
-//INPUT: struct movie list, low year and high year 
-//OUTPUT: prints out highest rated movies 
+//INPUT: struct movie list, low year and high year
+//OUTPUT: prints out highest rated movies
 //note: if two or more movies are the highest rated, program will pick
 // the first movie it encounters in list and print that only
 void printHighestRatedMoviesByYear (struct movie *list)
@@ -373,7 +372,7 @@ void printHighestRatedMoviesByYear (struct movie *list)
     int highYear = findHighestYear(list); //returns 0 if nothing in list
     int yearCounter = lowYear; //used for loop counter
 
-    if (lowYear == 9999 || highYear == 0)//if nothing in list 
+    if (lowYear == 9999 || highYear == 0)//if nothing in list
     {
         printf("Movie list is empty, no movies to display");
     }
@@ -403,7 +402,7 @@ void printHighestRatedMoviesByYear (struct movie *list)
                 temp = temp->next;
             }
             
-            //if there wasn't a movie that year, skip 
+            //if there wasn't a movie that year, skip
             if (highestRated != NULL) //NULL also equals 0
             {
                 //print out year, high movie rating and movie title
@@ -427,12 +426,12 @@ void printMoviesByLanguage(struct movie *list, char *userLanguage)
     struct movie *temp = list;
     int anyMoviesFound = 0; //false (0) if no movies are found in that language
     
-    //iterate through list of movies, checking for language match 
+    //iterate through list of movies, checking for language match
     while (temp != NULL)
     {
         int counter = 0;
         
-        //check each movie's language array for match 
+        //check each movie's language array for match
         while (counter < 5) //max of 5 languages (0-4) in array
         {
             //compares temp language to userLanguage. If strcmp equals 0, they match
@@ -455,6 +454,7 @@ void printMoviesByLanguage(struct movie *list, char *userLanguage)
     
     return;
 }
+
 
 
 

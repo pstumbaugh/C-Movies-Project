@@ -31,20 +31,20 @@ int main(int argc, char *argv[])
     char userLanguage[21];
 
 
-char *myFile = "movie_sample_1.csv";                                                      //**need to delete and use arg
-/*
+//char *myFile = "movie_sample_1.csv";                                                      //**need to delete and use arg
+
     if (argc < 2)
     {
         printf("You must provide the name of the file to process\n");
         printf("Example usage: ./movies movie_sample_1.csv\n");
         return EXIT_FAILURE;
     }
-*/
+
     //Process movie file and print initial findings
-    struct movie *list = processFile(myFile);                                   //******need to change to arg
+    struct movie *list = processFile(argv[1]);                                   //******need to change to arg
     int numOfMovies = movieCount(list);
     printf("Processed file %s and parsed data for %i movies\n\n",
-        myFile, numOfMovies);
+        argv[1], numOfMovies);
                                                                                 //******need to change to arg
     
     //main user interface loop

@@ -31,7 +31,7 @@ int main(int argc, char *argv[])
     char userLanguage[21];
 
 
-char *myFile = "data.txt";                                                      //**need to delete and use arg
+char *myFile = "movie_sample_1";                                                      //**need to delete and use arg
 /*
     if (argc < 2)
     {

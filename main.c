@@ -30,8 +30,8 @@ int main(int argc, char *argv[])
     int userYear = 0;
     char userLanguage[21];
 
-
-//char *myFile = "movie_sample_1.csv";                                                      //**need to delete and use arg
+//testing file (not argv[1])
+//char *myFile = "movie_sample_1.csv";                                                      
 
     if (argc < 2)
     {
@@ -41,11 +41,11 @@ int main(int argc, char *argv[])
     }
 
     //Process movie file and print initial findings
-    struct movie *list = processFile(argv[1]);                                   //******need to change to arg
+    struct movie *list = processFile(argv[1]);                                   
     int numOfMovies = movieCount(list);
     printf("Processed file %s and parsed data for %i movies\n\n",
         argv[1], numOfMovies);
-                                                                                //******need to change to arg
+                                                                                
     
     //main user interface loop
     while (userChoice)

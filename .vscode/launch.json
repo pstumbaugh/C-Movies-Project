@@ -8,7 +8,7 @@
             "name": "(lldb) Launch",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/main",
+            "program": "${workspaceFolder}/movies",
             "args": ["movie_sample_1.csv"],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",

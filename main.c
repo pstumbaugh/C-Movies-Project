@@ -31,12 +31,12 @@ int main(int argc, char *argv[])
     char userLanguage[21];
 
 
-char *myFile = "movie_sample_1";                                                      //**need to delete and use arg
+char *myFile = "movie_sample_1.csv";                                                      //**need to delete and use arg
 /*
     if (argc < 2)
     {
         printf("You must provide the name of the file to process\n");
-        printf("Example usage: ./movies movie_sample_1.txt\n");
+        printf("Example usage: ./movies movie_sample_1.csv\n");
         return EXIT_FAILURE;
     }
 */
@@ -174,7 +174,8 @@ struct movie *createMovie(char *currLine)
         {
             if (langToken[strlen(langToken)-1] == ']') //only one language
             {
-                memcpy(langToken, langToken+1,sizeof(langToken));//remove leading "["
+                int tempSize = sizeof(langToken);
+                memcpy(langToken, langToken+1,tempSize);//remove leading "["
                 //above adds last char on to word again ("]")
                 //below is strlen(...)-2 to take off both trailing "]" characters
                 langToken[strlen(langToken)-2] = '\0'; //replace last char with null
@@ -183,7 +184,10 @@ struct movie *createMovie(char *currLine)
                 break;
             }
             else
-                memcpy(langToken, langToken+1,sizeof(langToken));
+            {
+                int tempSize = sizeof(langToken);
+                memcpy(langToken, langToken+1,tempSize);
+            }
         }
 
         //if last langauge, remove trailing "]" and break

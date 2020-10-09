@@ -17,7 +17,7 @@ As an example, let's say I have a data file named movie_sample_1.csv. I make sur
  
 
  **
- An alernative way to create the executable file is to run each computer process step by step:
+ An alternative way to create the executable file is to run each computer process step by step:
 Invoking Preprocessor:
     gcc --std=c99 -E main.c > main.i
 

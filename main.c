@@ -1,6 +1,6 @@
 //create using:
 // gcc --std=c99 -o movies main.c
-//then run using:
+//then run using (entering your own data file name):
 // ./movies movie_sample_1.csv
 
 #include <stdio.h>
@@ -28,13 +28,11 @@ int main(int argc, char *argv[])
     //variables
     int userChoice = 1; //initialize to 1 to enter while loop (later)
     int userYear = 0;
-    char userLanguage[21];
-
-//testing file (not argv[1])
-//char *myFile = "movie_sample_1.csv";                                                      
+    char userLanguage[21];                                                    
 
     if (argc < 2)
     {
+        printf("\n");
         printf("You must provide the name of the file to process\n");
         printf("Example usage: ./movies movie_sample_1.csv\n");
         return EXIT_FAILURE;
@@ -43,8 +41,8 @@ int main(int argc, char *argv[])
     //Process movie file and print initial findings
     struct movie *list = processFile(argv[1]);                                   
     int numOfMovies = movieCount(list);
-    printf("Processed file %s and parsed data for %i movies\n\n",
-        argv[1], numOfMovies);
+    printf("\n");
+    printf("Processed file %s and parsed data for %i movies\n\n", argv[1], numOfMovies);
                                                                                 
     
     //main user interface loop

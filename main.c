@@ -167,47 +167,18 @@ struct movie *createMovie(char *currLine)
     int langCounter = 0;
     while (langCounter < 5)
     {
-        //nothing in token to save, break
-        if (langToken == NULL)
+        if (langCounter == 0) //first item
         {
-            break;
+            token = strtok_r(langToken, "; ]", &langSaveptr); //from first token
+            strcpy(currMovie->languages[langCounter], token);
+            langCounter++;
         }
-        //first item in token list, remove leading "["
-        else if (langCounter == 0)
-        {
-            if (langToken[strlen(langToken)-1] == ']') //only one language
-            {
-                int tempSize = sizeof(langToken);
-                memcpy(langToken, langToken+1,tempSize);//remove leading "["
-                //above adds last char on to word again ("]")
-                //below is strlen(...)-2 to take off both trailing "]" characters
-                langToken[strlen(langToken)-2] = '\0'; //replace last char with null
-                int size = sizeof(langToken);
-                strncpy(currMovie->languages[langCounter], langToken, size+1); //save language into array position
-                break;
-            }
-            else
-            {
-                int tempSize = sizeof(langToken);
-                memcpy(langToken, langToken+1,tempSize);
-            }
-        }
-
-        //if last langauge, remove trailing "]" and break
-        if (langToken[strlen(langToken)-1] == ']')
-        {
-            langToken[strlen(langToken)-1] = '\0'; //replace last char with null
-            int size = sizeof(langToken);
-            strncpy(currMovie->languages[langCounter], langToken, size+1); //save language into array position
-            break;
-        }
-        //else copy item into languages array at desired array position
         else
         {
-            int size = sizeof(langToken);
-            strncpy(currMovie->languages[langCounter], langToken, size+1);
-            //get next word, (or '\0' if nothing left)
-            langToken = strtok_r(NULL, ";", &langSaveptr);
+            token = strtok_r(NULL, "; ]", &langSaveptr); //from first token
+            if (token == NULL) //nothing left
+                break;
+            strcpy(currMovie->languages[langCounter], token);
             langCounter++;
         }
     }

@@ -1,5 +1,5 @@
 //create using:
-// gcc --std=c99 -o movies main.c
+// gcc --std=gnu99 -o movies main.c
 //then run using (entering your own data file name):
 // ./movies movie_sample_1.csv
 

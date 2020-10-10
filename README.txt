@@ -6,7 +6,7 @@ The main menu will give the user different options of displaying movie data.
 
 To make the file:
 Create an executable in the command line of the same directory that main.c is in by typing in:
-    gcc --std=c99 -o movies main.c
+    gcc --std=gn99 -o movies main.c
 
 This will create an executable file named "movies" (as per the -o flag command above)
 
@@ -19,18 +19,18 @@ As an example, let's say I have a data file named movie_sample_1.csv. I make sur
  **
  An alternative way to create the executable file is to run each computer process step by step:
 Invoking Preprocessor:
-    gcc --std=c99 -E main.c > main.i
+    gcc --std=gnu99 -E main.c > main.i
 
 Then take your .i file and run the compiler:
-    gcc --std=c99 -S main.i
+    gcc --std=gnu99 -S main.i
 This will create an main.s file with assembly language instructions.
 
 Next, call the assembler:
-    gcc --std=c99 -c main.s
+    gcc --std=gnu99 -c main.s
 That will create a .o file.
 
 Next, run the linker (assuming our executable to be named "movies" using the -o flag):
-    gcc --std=c99 -o movies main.o
+    gcc --std=gnu99 -o movies main.o
 
 This will give you the executable file "movies. 
 Run by entering (using your actual data file name and extension):

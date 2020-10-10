@@ -19,6 +19,7 @@ int findLowestYear(struct movie *list);
 int findHighestYear(struct movie *list);
 void printHighestRatedMoviesByYear (struct movie *list);
 void printMoviesByLanguage(struct movie *list, char *userLanguage);
+void freeMem(struct movie *list);
 
 
 
@@ -102,6 +103,8 @@ int main(int argc, char *argv[])
             break; //break from while loop, goes to return for main() function
         }
     }
+
+    freeMem(list);
     
     return EXIT_SUCCESS;
 }
@@ -462,6 +465,21 @@ void printMoviesByLanguage(struct movie *list, char *userLanguage)
 
 
 
+void freeMem(struct movie *list)
+{
 
+    struct movie *temp = list;
+    while (temp != NULL)
+    {
+        struct movie *temp2 = temp->next;
+        free(temp->title);
+        free(temp->tempYear);
+        free(temp->tempRating);
+        free(temp);
+        temp = temp2;
+    }
+
+    return;
+}
 
 

@@ -6,7 +6,7 @@ The main menu will give the user different options of displaying movie data.
 
 To make the file:
 Create an executable in the command line of the same directory that main.c is in by typing in:
-    gcc --std=gn99 -o movies main.c
+    gcc --std=gnu99 -o movies main.c
 
 This will create an executable file named "movies" (as per the -o flag command above)
 

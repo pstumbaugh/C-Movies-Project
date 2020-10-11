@@ -42,7 +42,7 @@ int main(int argc, char *argv[])
     }
 
     //Process movie file and print initial findings
-    struct movie *list = processFile(argv[1]);                                   
+    struct movie *list = processFile(argv[1]);       
     int numOfMovies = movieCount(list);
     printf("\n");
     printf("Processed file %s and parsed data for %i movies\n\n", argv[1], numOfMovies);
@@ -163,7 +163,7 @@ struct movie *createMovie(char *currLine)
     //get movie language(s)
     //token includes all languages
     token = strtok_r(NULL, ",", &saveptr); //from third token
-    langToken = strtok_r(token, ";", &langSaveptr); //get first language in token
+    langToken = strtok_r(token, "[", &langSaveptr); //get rid of [ from start
     int langCounter = 0;
     while (langCounter < 5)
     {
@@ -197,6 +197,9 @@ struct movie *createMovie(char *currLine)
 
     return currMovie;
 }
+
+
+
 
 
 //read through input file and parse information into a linked list of movies
